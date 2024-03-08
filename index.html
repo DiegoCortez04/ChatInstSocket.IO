@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat en tiempo real</title>
+</head>
+<body>
+    <div id="chat"></div>
+    <input type="text" id="mensajeInput" placeholder="Escribe un mensaje...">
+    <button id="enviarMensaje">Enviar</button>
+
+    <!-- Importar Socket.IO -->
+    <script src="https://cdn.socket.io/4.1.3/socket.io.js"></script>
+    <script>
+        // Establecer conexión con el servidor
+        const socket = io();
+        console.log('Conexión establecida con el servidor');
+        // Manejar el envío de mensajes desde el cliente
+        document.getElementById('enviarMensaje').addEventListener('click', () => {
+            const mensaje = document.getElementById('mensajeInput').value;
+            socket.emit('nuevo mensaje', mensaje);
+            document.getElementById('mensajeInput').value = '';
+        });
+
+        // Manejar la recepción de mensajes desde el servidor
+        socket.on('mensaje recibido', (mensaje) => {
+            const chat = document.getElementById('chat');
+            const nuevoMensaje = document.createElement('p');
+            nuevoMensaje.textContent = mensaje;
+            chat.appendChild(nuevoMensaje);
+        });
+    </script>
+</body>
+</html>
